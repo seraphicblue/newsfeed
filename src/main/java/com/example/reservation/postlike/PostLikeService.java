@@ -2,6 +2,7 @@ package com.example.reservation.postlike;
 
 import com.example.reservation.member.Member;
 import com.example.reservation.member.MemberRepository;
+import com.example.reservation.newsfeed.NewsfeedService;
 import com.example.reservation.post.Post;
 import com.example.reservation.post.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,12 +17,14 @@ public class PostLikeService {
     private final PostRepository postRepository;
 
     private final MemberRepository memberRepository;
+    private final NewsfeedService newsfeedService;
 
     @Autowired
-    public PostLikeService(PostLikeRepository likeRepository, PostRepository postRepository, MemberRepository memberRepository) {
+    public PostLikeService(PostLikeRepository likeRepository, PostRepository postRepository, MemberRepository memberRepository, NewsfeedService newsfeedService) {
         this.likeRepository = likeRepository;
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
+        this.newsfeedService = newsfeedService;
     }
 
     public PostLike likePost(Long memberId, Long postId) {
@@ -37,6 +40,9 @@ public class PostLikeService {
                 .member(member)
                 .activityType(POST_LIKE)
                 .build();
+
+
+        newsfeedService.addNotificationToNewsfeed(post.getMember(), member, newLike.getActivityType());
 
         // Like 객체를 데이터베이스에 저장합니다.
         return likeRepository.save(newLike);

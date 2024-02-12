@@ -2,6 +2,7 @@ package com.example.reservation.follow;
 
 import com.example.reservation.member.Member;
 import com.example.reservation.member.MemberRepository;
+import com.example.reservation.newsfeed.NewsfeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
+    private final NewsfeedService newsfeedService;
 
 
-    public FollowServiceImpl(FollowRepository followRepository, MemberRepository memberRepository) {
+    public FollowServiceImpl(FollowRepository followRepository, MemberRepository memberRepository, NewsfeedService newsfeedService) {
         this.followRepository = followRepository;
         this.memberRepository = memberRepository;
+        this.newsfeedService = newsfeedService;
     }
 
     @Override
@@ -34,6 +37,9 @@ public class FollowServiceImpl implements FollowService {
                 .following(following)
                 .activityType(FOLLOW)
                 .build();
+
+
+        newsfeedService.addNotificationToNewsfeed(follower, following ,follow.getActivityType());
 
         followRepository.save(follow);
     }

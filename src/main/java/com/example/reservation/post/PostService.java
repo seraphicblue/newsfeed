@@ -4,6 +4,7 @@ import com.example.reservation.comment.CommentRepository;
 import com.example.reservation.follow.FollowService;
 import com.example.reservation.member.Member;
 import com.example.reservation.member.MemberRepository;
+import com.example.reservation.newsfeed.NewsfeedService;
 import com.example.reservation.postlike.PostLikeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,12 @@ import static com.example.reservation.activity.ActivityType.POST;
 public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final NewsfeedService newsfeedService;
 
-    public PostService(PostRepository postRepository, MemberRepository memberRepository) {
+    public PostService(PostRepository postRepository, MemberRepository memberRepository, NewsfeedService newsfeedService) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
+        this.newsfeedService = newsfeedService;
     }
 
     public Post createPost(Long memberId, String content) {
@@ -33,6 +36,9 @@ public class PostService {
                 .member(member)
                 .activityType(POST)
                 .build(); // Post 클래스의 생성자 또는 빌더를 이용한 인스턴스 생성
+
+
+        newsfeedService.addNotificationToNewsfeed(newPost.getMember(),member, newPost.getActivityType());
         return postRepository.save(newPost);
     }
 
