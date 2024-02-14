@@ -70,10 +70,8 @@ CREATE TABLE newsfeed (
                           newsfeed_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           receiver_id BIGINT,
                           sender_id BIGINT,
-                          activity_id BIGINT,
-                          newsfeed_type VARCHAR(255),
-                          created_at DATETIME,
+                          activity_type VARCHAR(255) NOT NULL,
+                          created_at DATETIME NOT NULL,
                           FOREIGN KEY (receiver_id) REFERENCES member(member_id),
-                          FOREIGN KEY (sender_id) REFERENCES member(member_id),
-                          FOREIGN KEY (activity_id) REFERENCES activity(activity_id)
+                          FOREIGN KEY (sender_id) REFERENCES member(member_id)
 );
