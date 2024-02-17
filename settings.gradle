@@ -1,7 +1,9 @@
 rootProject.name = 'reservation'
 
-include 'activity-module'
+
 include 'user-module'
 include 'newsfeed-module'
+include 'api-gateway'
+include 'activity-module'
 
 
